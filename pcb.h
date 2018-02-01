@@ -1,14 +1,14 @@
 // --- Object Definitions
 
 // Process Control Block --- Expand on this object as needed. Just don't forget to change the constructors. 
-struct PCB 
+typedef struct 
 { 
 	int arrivalTime;
 	int burst;
 	int burstRemaining;
 	int lastUse; 			// Describes the time unit the program last got kicked off the processor
 	int waitTime;
-}
+} PCB;
 
 
 // --- Constructor List --- // 
