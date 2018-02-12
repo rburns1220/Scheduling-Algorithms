@@ -3,6 +3,7 @@
 // Process Control Block --- Expand on this object as needed. Just don't forget to change the constructors. 
 typedef struct 
 { 
+	char* name;
 	int arrivalTime;
 	int burst;
 	int burstRemaining;
