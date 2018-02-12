@@ -1,4 +1,7 @@
+#include <string.h>
+
 // --- Object Definitions
+
 
 // Process Control Block --- Expand on this object as needed. Just don't forget to change the constructors. 
 typedef struct 
@@ -14,7 +17,7 @@ typedef struct
 
 // --- Constructor List --- // 
 PCB* createEmptyPCB();
-PCB* createPCB(int, int, int, int, int);
+PCB* createPCB(char*, int, int, int, int, int);
 
 
 // --- Constructor Definitions --- // 
@@ -29,10 +32,12 @@ PCB* createEmptyPCB()
 }
 
 // Full Input PCB Constructor
-PCB* createPCB(int arrivalTime, int burst, int burstRemaining, int lastUse, int waitTime)
+PCB* createPCB(char* name, int arrivalTime, int burst, int burstRemaining, int lastUse, int waitTime)
 {
 	PCB* pcb = malloc(sizeof(PCB));
 
+	pcb->name = malloc(sizeof(char) * (strlen(name) + 1));
+	strcpy(pcb->name, name);
 	pcb->arrivalTime = arrivalTime;
 	pcb->burst = burst;
 	pcb->burstRemaining = burstRemaining;
