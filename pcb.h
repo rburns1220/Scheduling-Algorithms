@@ -1,11 +1,12 @@
 #include <string.h>
+#include <stdlib.h>
 
 // --- Object Definitions
 
 
-// Process Control Block --- Expand on this object as needed. Just don't forget to change the constructors. 
-typedef struct 
-{ 
+// Process Control Block --- Expand on this object as needed. Just don't forget to change the constructors.
+typedef struct
+{
 	char* name;
 	int arrivalTime;
 	int burst;
@@ -15,14 +16,14 @@ typedef struct
 } PCB;
 
 
-// --- Constructor List --- // 
+// --- Constructor List --- //
 PCB* createEmptyPCB();
 PCB* createPCB(char*, int, int, int, int, int);
 
 
-// --- Constructor Definitions --- // 
+// --- Constructor Definitions --- //
 
-// Empty PCB Constructor 
+// Empty PCB Constructor
 PCB* createEmptyPCB()
 {
 	PCB* pcb = malloc(sizeof(PCB));
