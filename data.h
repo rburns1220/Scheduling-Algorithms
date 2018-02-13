@@ -32,7 +32,7 @@ typedef struct
 } Data;
 
 Data* parseFile (char* filename);
-int strToInt(char* str)
+int strToInt(char* str);
 
 Data* parseFile (char* filename)
 {
