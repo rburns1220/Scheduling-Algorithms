@@ -1,4 +1,25 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "pcb.h"
+
 // --- Object Definitions -- //
+
+
+// --- README --- //
+/*
+
+    - Node* createEmptyNode()  :    Creates an node with null attributes
+    - Node* createNode(PCB*)   :    Creates a node with the PCB* as the process attribute
+    - Queue* createQueue()     :    Create an empty queue
+    - Node* pop(Queue* q)      :    Pass the queue you wish to pop from and it will return the node and set the new head.
+    - void push(Queue*, Node*) :    Push Node* to the end of the queue.
+    - void pushByArrival(Queue* q, Node* node)          : Push Node* based on it's process's arrivalTime. Lower arrivalTime, closer to head.
+    - void pushByBurstRemaining(Queue* q, Node* node)   : Push Node* based on process's burstRemaining. Lower burstRemaining, closer to head.
+
+    ****IMPORTANT****
+    To actually use a queue, you'll need to initialize a node per process before you can push/pop.
+
+*/
 
 typedef struct Node Node;
 struct Node
@@ -20,12 +41,14 @@ typedef struct
 
 
 
-// --- Function List --- // 
+// --- Function List --- //
 Node* createEmptyNode();
-Node* createNode(Node*, Node*, PCB*);
+Node* createNode(PCB*);
 Queue* createQueue();
 Node* pop(Queue*);
 void push(Queue*, Node*);
+void pushByArrival(Queue* q, Node* node);
+void pushByBurstRemaining(Queue* q, Node* node);
 
 
 
@@ -42,13 +65,12 @@ Node* createEmptyNode()
 	return returnNode;
 }
 
-// Full Input Node Constructor
-Node* createNode(Node* ahead, Node* behind, PCB* process)
+Node* createNode(PCB* process)
 {
 	Node* returnNode = malloc(sizeof(Node));
 
-	returnNode->ahead = ahead;
-	returnNode->behind = behind;
+	returnNode->ahead = NULL;
+	returnNode->behind = NULL;
 	returnNode->process = process;
 
 	return returnNode;
@@ -71,6 +93,8 @@ Node* pop(Queue* q)
 	Node* nodeToPop;
 
 	if (q == NULL)
+		return NULL;
+	if (q->head == NULL)
 		return NULL;
 
 	nodeToPop = q->head;
@@ -113,4 +137,98 @@ void push(Queue* q, Node* node)
 	}
 }
 
+void pushByArrival(Queue* q, Node* node)
+{
+	Node* currentNode;
 
+	if (q == NULL || node == NULL)
+		return;
+
+	currentNode = q->head;
+
+	while(currentNode != NULL)
+	{
+		if (node->process->arrivalTime < currentNode->process->arrivalTime)
+				break;
+	}
+
+	// Head Insert
+	if (q->head == NULL)
+	{
+		q->head = node;
+	}
+	// Tail Insert
+	else if (currentNode == NULL)
+	{
+		// Null Tail
+		if (q->tail == NULL)
+		{
+			q->tail = node;
+			q->head->ahead = node;
+			q->tail->behind = q->head;
+		}
+
+		// There is a Tail
+		else
+		{
+			q->tail->ahead = node;
+			node->behind = q->tail;
+			q->tail = node;
+		}
+	}
+	else
+	{
+		node->behind = currentNode->behind;
+		node->ahead = currentNode;
+		currentNode->behind = node;
+	}
+
+}
+
+void pushByBurstRemaining(Queue* q, Node* node)
+{
+	Node* currentNode;
+
+	if (q == NULL || node == NULL)
+		return;
+
+	currentNode = q->head;
+
+	while(currentNode != NULL)
+	{
+		if (node->process->burstRemaining < currentNode->process->burstRemaining)
+				break;
+	}
+
+	// Head Insert
+	if (q->head == NULL)
+	{
+		q->head = node;
+	}
+	// Tail Insert
+	else if (currentNode == NULL)
+	{
+		// Null Tail
+		if (q->tail == NULL)
+		{
+			q->tail = node;
+			q->head->ahead = node;
+			q->tail->behind = q->head;
+		}
+
+		// There is a Tail
+		else
+		{
+			q->tail->ahead = node;
+			node->behind = q->tail;
+			q->tail = node;
+		}
+	}
+	else
+	{
+		node->behind = currentNode->behind;
+		node->ahead = currentNode;
+		currentNode->behind = node;
+	}
+
+}
