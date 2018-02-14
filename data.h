@@ -3,20 +3,19 @@
 #include <math.h>
 #include <string.h>
 
-// -------------- Description ----------------- 
+// -------------- Description -----------------
 /*
   Objective: Parse the input file and return a Data object.
-  
-  Data Object Elements: 
-    - int processcount - The number of processes to be scheduled. 
-    - int runfor - The amount of total time alotted to schedule them. 
-    - int quantum - The quantum size for running RR algorithm. 
+
+  Data Object Elements:
+    - int processcount - The number of processes to be scheduled.
+    - int runfor - The amount of total time alotted to schedule them.
+    - int quantum - The quantum size for running RR algorithm.
     - char* algorithm - String identifying the algorithm to be used (rr, fcfs, sjf)
     - PCB** pcbArray - An Array of PCBs to be scheduled (includes their name, burst, and arrivalTime)
-
   Function Data* parsefile(char* filename)
-    - Receives a string of the file to be parsed and returns an a pointer to a Data object containing the parsed info. 
-  
+    - Receives a string of the file to be parsed and returns an a pointer to a Data object containing the parsed info.
+
 */
 
 typedef struct
@@ -31,6 +30,7 @@ typedef struct
 } Data;
 
 Data* parseFile (char* filename);
+void destroyData(Data*);
 int strToInt(char* str);
 
 Data* parseFile (char* filename)
@@ -193,6 +193,18 @@ Data* parseFile (char* filename)
 	return data;
 }
 
+void destroyData(Data* data)
+{
+    int i;
+    for (i = 0; i < data->processcount; i++)
+    {
+        free(data->pcbArray[i]->name);
+        free(data->pcbArray[i]);
+    }
+    free(data->algorithm);
+    free(data);
+}
+
 int strToInt(char* str)
 {
 	int i;
@@ -204,3 +216,5 @@ int strToInt(char* str)
 
 	return num;
 }
+
+
