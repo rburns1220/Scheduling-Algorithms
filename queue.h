@@ -147,7 +147,7 @@ void pushByArrival(Queue* q, Node* node)
 	{
 		if (node->process->arrivalTime < currentNode->process->arrivalTime)
 				break;
-        currentNode = currentNode->ahead;
+        	currentNode = currentNode->ahead;
 	}
 
 	// Head Insert
@@ -198,7 +198,7 @@ void pushByBurstRemaining(Queue* q, Node* node)
 	{
 		if (node->process->burstRemaining < currentNode->process->burstRemaining)
 				break;
-        currentNode = currentNode->ahead;
+        	currentNode = currentNode->ahead;
 	}
 
 	// Head Insert
