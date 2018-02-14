@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 // --- Object Definitions -- //
 
 
 // --- README --- //
 /*
-
     - Node* createEmptyNode()  :    Creates an node with null attributes
     - Node* createNode(PCB*)   :    Creates a node with the PCB* as the process attribute
     - Queue* createQueue()     :    Create an empty queue
@@ -14,10 +12,8 @@
     - void push(Queue*, Node*) :    Push Node* to the end of the queue.
     - void pushByArrival(Queue* q, Node* node)          : Push Node* based on it's process's arrivalTime. Lower arrivalTime, closer to head.
     - void pushByBurstRemaining(Queue* q, Node* node)   : Push Node* based on process's burstRemaining. Lower burstRemaining, closer to head.
-
     ****IMPORTANT****
     To actually use a queue, you'll need to initialize a node per process before you can push/pop.
-
 */
 
 typedef struct Node Node;
@@ -99,7 +95,9 @@ Node* pop(Queue* q)
 	nodeToPop = q->head;
 	q->head = nodeToPop->ahead;
 	nodeToPop->ahead = NULL;
-	q->head->behind = NULL;
+
+	if (q->head != NULL)
+        q->head->behind = NULL;
 
 	return nodeToPop;
 }
@@ -149,6 +147,7 @@ void pushByArrival(Queue* q, Node* node)
 	{
 		if (node->process->arrivalTime < currentNode->process->arrivalTime)
 				break;
+        currentNode = currentNode->ahead;
 	}
 
 	// Head Insert
@@ -177,6 +176,8 @@ void pushByArrival(Queue* q, Node* node)
 	}
 	else
 	{
+	    if (currentNode == q->head)
+            q->head = node;
 		node->behind = currentNode->behind;
 		node->ahead = currentNode;
 		currentNode->behind = node;
@@ -197,6 +198,7 @@ void pushByBurstRemaining(Queue* q, Node* node)
 	{
 		if (node->process->burstRemaining < currentNode->process->burstRemaining)
 				break;
+        currentNode = currentNode->ahead;
 	}
 
 	// Head Insert
