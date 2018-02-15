@@ -195,5 +195,4 @@ void rr (Data* data, FILE* fp)
 
     free(arrivedQueue);
     free(queue);
-	fclose(fp);
 }
