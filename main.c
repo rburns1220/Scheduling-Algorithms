@@ -5,6 +5,7 @@
 #include "data.h"
 #include "queue.h"
 #include "sjf.h"
+#include "rr.h"
 
 int main()
 {
@@ -16,6 +17,8 @@ int main()
 
     if (strcmp(data->algorithm, "sjf") == 0)
         shortestJobFirst(data, out);
+    else if (strcmp(data->algorithm, "rr") == 0)
+        rr(data, out);
     // Add other algorithms here *****
 
     destroyData(data);
