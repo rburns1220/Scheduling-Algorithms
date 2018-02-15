@@ -120,6 +120,7 @@ void push(Queue* q, Node* node)
 	// Only one node in Queue (head)
 	else if (q->tail == NULL)
 	{
+	    q->head->ahead = node;
 		q->tail = node;
 		node->ahead = NULL;
 		node->behind = q->head;
@@ -128,9 +129,10 @@ void push(Queue* q, Node* node)
 	// Queue has two or more nodes.
 	else
 	{
-		node->behind = q->tail;
-		node->ahead = NULL;
-		q->tail = node;
+	    q->tail->ahead = node;
+        node->behind = q->tail;
+        q->tail = node;
+        node->ahead = NULL;
 	}
 }
 
@@ -227,8 +229,8 @@ void pushByBurstRemaining(Queue* q, Node* node)
 	}
 	else
 	{
-	    	if (currentNode == q->head)
-            		q->head = node;
+	    if (currentNode == q->head)
+            q->head = node;
 		node->behind = currentNode->behind;
 		node->ahead = currentNode;
 		currentNode->behind = node;
