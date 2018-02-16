@@ -1,12 +1,15 @@
 # PA1: Scheduling-Algorithms
 
 Assignment:
+
 	Implement the First-Come First-Served, preemptive Shortest Job First, and Round-Robin algorithms as for single processors.
 
 Input:
+
 	Program will read a file from the current directory called processes.in, which will be formatted as follows. The program should ignore everything on a line after a # mark and ignore additional spaces in input.
 
 Sample Input:
+
 	processcount 2        # Read 5 processes
 	runfor 15             # Run for 15 time units
 	use rr                # Can be fcfs, sjf, or rr
@@ -17,9 +20,11 @@ Sample Input:
 Note that the processes do not need to be specified in order of arrival, and do not need to have similar names.
 
 Output:
+
 	Generate a file called processes.out, formatted as follows.
 
 Sample Output:
+
 	2 processes
 	Using Round-Robin
 	Quantum 2
@@ -43,6 +48,7 @@ Sample Output:
 	P2 wait 5 turnaround 14
 
 Clarifications:
+
 	This version of Round-Robin should not run the scheduler immediately upon the arrival of a new process, unless the CPU is currently idle.
 
 	The program will not be given an input that results in an ambiguous decision, such as identical arrival times for Round-Robin or identical burst lengths for SJF.
