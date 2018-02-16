@@ -184,22 +184,23 @@ void rr (Data* data, FILE* fp)
 		time++;
     }
 
-	// The runfor time has been hit
-	fprintf(fp, "Finished at time %d\n\n", time);
-	
 	// Check if a process finished on the last tick
     if (activeNode != NULL && activeNode->process->burstRemaining == 0)
-    {
+    	{
         fprintf(fp, "Time %d: %s finished\n", time, activeNode->process->name);
         free(activeNode);
         activeNode = NULL;
-    }
+    	}
+	// The runfor time has been hit
+	fprintf(fp, "Finished at time %d\n\n", time);
+	
+	
 
 	for (i = 0; i < data->processcount; i++)
-    {
+    	{
         fprintf(fp, "%s wait %d turnaround %d\n", data->pcbArray[i]->name, data->pcbArray[i]->waitTime,
            data->pcbArray[i]->waitTime + data->pcbArray[i]->burst);
-    }
+    	}
 	
 
     free(arrivedQueue);
