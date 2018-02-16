@@ -77,6 +77,15 @@ void shortestJobFirst(Data* data, FILE* out)
         timer++;
 
 	}
+	
+	// Check if a process finished on the last tick
+	if (activeNode != NULL && activeNode->process->burstRemaining == 0)
+    	{
+        	fprintf(out, "Time %d: %s finished\n", timer, activeNode->process->name);
+        	free(activeNode);
+        	activeNode = NULL;
+   	}
+	
 	free(scheduleq);
 	free(arrivalq);
 
