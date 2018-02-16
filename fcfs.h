@@ -87,7 +87,7 @@ void firstComeFirstServed(Data* data, FILE* out)
 
 
 	fprintf(out, "Finished at time %d\n\n", timer);
-	for (int i = 0; i < processCount; i++)
+	for (int i = 0; i < data->processcount; i++)
 	{
 		// Calculate turn around time as time spent waiting + time spent executing
 		int turnAroundTime = data->pcbArray[i]->waitTime + data->pcbArray[i]->burst;
