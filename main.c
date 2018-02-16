@@ -12,6 +12,7 @@
 #include "queue.h"
 #include "sjf.h"
 #include "rr.h"
+#include "fcfs.h"
 
 int main()
 {
