@@ -69,7 +69,7 @@ Data* parseFile (char* filename)
 				break;
 
 			// Skip Spaces
-			else if (*(line + i) == ' ')
+			else if (*(line + i) == ' ' || *(line + i) == '\t' )
 				continue;
 
 			else
