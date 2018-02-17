@@ -20,7 +20,7 @@ int main()
 	Data* data;
 
 	out = fopen("process.out", "w");
-	data = parseFile("process.in");
+	data = parseFile("processes.in");
 
 	if (strcmp(data->algorithm, "sjf") == 0)
 	{
