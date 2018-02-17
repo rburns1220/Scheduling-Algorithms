@@ -4,49 +4,6 @@
 // COP 4600 Spring 2018 Programming Assignment 1
 // Round Robin
 
-/*
-todo: delete this notes section
-
-****** notes:
-
-Generate file called processes.out
-
-
-  	 2 processes
-	 Using Round-Robin
-	 Quantum 2
-
-	 Time 0: P2 arrived
-	 Time 0: P2 selected (burst 9)
-	 Time 2: P2 selected (burst 7)
-	 Time 3: P1 arrived
-	 Time 4: P1 selected (burst 5)
-	 Time 6: P2 selected (burst 5)
-	 Time 8: P1 selected (burst 3)
-	 Time 10: P2 selected (burst 3)
-	 Time 12: P1 selected (burst 1)
-	 Time 13: P1 finished
-	 Time 13: P2 selected (burst 1)
-	 Time 14: P2 finished
-	 Time 14: Idle
-	 Finished at time 15
-
-	 P1 wait 5 turnaround 10
-	 P2 wait 5 turnaround 14
-
-
-******/
-
-
-// todo: delete
-/* Notes on how this will work:
-
-i will create two queues, one that holds all the processes, and the other that holds the processes
-that have already arrived. The round robin algorithm will cycle through the processes in the queue
-that holds processes which have already arrived.
-*/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -112,11 +69,11 @@ void rr (Data* data, FILE* fp)
 		}
 
 		if (activeNode == NULL && arrivedQueue->head != NULL)
-		{
-			activeNode = arrivedQueue->head;
-			fprintf(fp, "Time %d: %s selected (burst %d)\n",time, arrivedQueue->head->process->name, arrivedQueue->head->process->burstRemaining);
-			activeNode->process->waitTime += time - activeNode->process->lastUse;
-		}
+        {
+            activeNode = arrivedQueue->head;
+            fprintf(fp, "Time %d: %s selected (burst %d)\n",time, arrivedQueue->head->process->name, arrivedQueue->head->process->burstRemaining);
+            activeNode->process->waitTime += time - activeNode->process->lastUse;
+        }
 
 		// We now have updated the queue by removing all nodes that already arrived.
 		// We also updated the arrivedQueue by adding all nodes that have arrived already.
@@ -130,15 +87,15 @@ void rr (Data* data, FILE* fp)
 			free(tempNode);
 			finished = 1;
 			if (arrivedQueue->head != NULL)
-			{
-				fprintf(fp, "Time %d: %s selected (burst %d)\n",time, arrivedQueue->head->process->name, arrivedQueue->head->process->burstRemaining);
-				activeNode = arrivedQueue->head;
-				activeNode->process->waitTime += time - activeNode->process->lastUse;
-			}
-			else
-			{
-				activeNode = NULL;
-			}
+            {
+                fprintf(fp, "Time %d: %s selected (burst %d)\n",time, arrivedQueue->head->process->name, arrivedQueue->head->process->burstRemaining);
+                activeNode = arrivedQueue->head;
+                activeNode->process->waitTime += time - activeNode->process->lastUse;
+            }
+            else
+            {
+                activeNode = NULL;
+            }
 			currentTime = 0;
 		}
 
@@ -150,15 +107,15 @@ void rr (Data* data, FILE* fp)
 			tempNode->process->lastUse = time;
 			push(arrivedQueue, tempNode);
 			if (arrivedQueue->head != NULL)
-			{
-				activeNode = arrivedQueue->head;
-				fprintf(fp, "Time %d: %s selected (burst %d)\n",time, arrivedQueue->head->process->name, arrivedQueue->head->process->burstRemaining);
-				activeNode->process->waitTime += time - activeNode->process->lastUse;
-			}
-			else
-			{
-				activeNode = NULL;
-			}
+            {
+                activeNode = arrivedQueue->head;
+                fprintf(fp, "Time %d: %s selected (burst %d)\n",time, arrivedQueue->head->process->name, arrivedQueue->head->process->burstRemaining);
+                activeNode->process->waitTime += time - activeNode->process->lastUse;
+            }
+            else
+            {
+                activeNode = NULL;
+            }
 
 			currentTime = 0;
 		}
@@ -167,12 +124,12 @@ void rr (Data* data, FILE* fp)
 		// Note we can decrement head regardless of the operations above so long as a head exists.
 		// Since if a head exists, we we work one unit of time on it.
 		if (arrivedQueue->head != NULL)
-		{
-			arrivedQueue->head->process->burstRemaining--;
-			currentTime++;
-		}
+        {
+            arrivedQueue->head->process->burstRemaining--;
+            currentTime++;
+        }
 
-		// Check if idle.
+        // Check if idle.
 		// If idle:
 		if (arrivedQueue->head == NULL)
 		{
@@ -181,27 +138,25 @@ void rr (Data* data, FILE* fp)
 
 		finished = 0;
 		time++;
-	}
+    }
 
-	// Check if a process finished on the last tick
-	if (activeNode != NULL && activeNode->process->burstRemaining == 0)
-	{
-		fprintf(fp, "Time %d: %s finished\n", time, activeNode->process->name);
-		free(activeNode);
-		activeNode = NULL;
-	}
+    // Check if a process finished on the last tick
+    if (activeNode != NULL && activeNode->process->burstRemaining == 0)
+    {
+        fprintf(fp, "Time %d: %s finished\n", time, activeNode->process->name);
+        free(activeNode);
+        activeNode = NULL;
+    }
+
 	// The runfor time has been hit
 	fprintf(fp, "Finished at time %d\n\n", time);
-	
-	
 
 	for (i = 0; i < data->processcount; i++)
-	{
-		fprintf(fp, "%s wait %d turnaround %d\n", data->pcbArray[i]->name, data->pcbArray[i]->waitTime,
-			data->pcbArray[i]->waitTime + data->pcbArray[i]->burst);
-	}
-	
+    {
+        fprintf(fp, "%s wait %d turnaround %d\n", data->pcbArray[i]->name, data->pcbArray[i]->waitTime,
+           data->pcbArray[i]->waitTime + data->pcbArray[i]->burst);
+    }
 
-	free(arrivedQueue);
-	free(queue);
+    free(arrivedQueue);
+    free(queue);
 }
