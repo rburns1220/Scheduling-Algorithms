@@ -98,6 +98,6 @@ void firstComeFirstServed(Data* data, FILE* out)
 	free(processQueue);
 	free(arrivedQueue);
 	if (activeProcess != NULL)
-        free(activeProcess);
+        	free(activeProcess);
 
 }
