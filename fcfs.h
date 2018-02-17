@@ -103,5 +103,4 @@ void firstComeFirstServed(Data* data, FILE* out)
 	arrivedQueue = NULL;
 	tempProcess = NULL;
 	activeProcess = NULL;
-	fclose(out);
 }
