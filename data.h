@@ -14,13 +14,13 @@
   Objective: Parse the input file and return a Data object.
 
   Data Object Elements:
-	- int processcount - The number of processes to be scheduled.
-	- int runfor - The amount of total time alotted to schedule them.
-	- int quantum - The quantum size for running RR algorithm.
-	- char* algorithm - String identifying the algorithm to be used (rr, fcfs, sjf)
-	- PCB** pcbArray - An Array of PCBs to be scheduled (includes their name, burst, and arrivalTime)
+    - int processcount - The number of processes to be scheduled.
+    - int runfor - The amount of total time alotted to schedule them.
+    - int quantum - The quantum size for running RR algorithm.
+    - char* algorithm - String identifying the algorithm to be used (rr, fcfs, sjf)
+    - PCB** pcbArray - An Array of PCBs to be scheduled (includes their name, burst, and arrivalTime)
   Function Data* parsefile(char* filename)
-	- Receives a string of the file to be parsed and returns an a pointer to a Data object containing the parsed info.
+    - Receives a string of the file to be parsed and returns an a pointer to a Data object containing the parsed info.
 
 */
 
@@ -52,15 +52,15 @@ Data* parseFile (char* filename)
 	int wordLen, nameLen, arrivalLen, burstLen;
 
 	if(fp == NULL)
-		return NULL;
+        return NULL;
 
-	data = malloc(sizeof(Data));
+    data = malloc(sizeof(Data));
 	data->initializedPCBs = 0;
 
-	while (fgets(line, 128, fp) != NULL)
-	{
+    while (fgets(line, 128, fp) != NULL)
+    {
 		length = strlen(line);
-		word = malloc(sizeof(char) * (strlen(line) + 1));
+        word = malloc(sizeof(char) * (strlen(line) + 1));
 		k = 0;
 
 		for (i = 0; i < length; i++)
@@ -192,23 +192,23 @@ Data* parseFile (char* filename)
 
 
 		free(word);
-	}
+    }
 
-	free(line);
-	fclose(fp);
+    free(line);
+    fclose(fp);
 	return data;
 }
 
 void destroyData(Data* data)
 {
-	int i;
-	for (i = 0; i < data->processcount; i++)
-	{
-		free(data->pcbArray[i]->name);
-		free(data->pcbArray[i]);
-	}
-	free(data->algorithm);
-	free(data);
+    int i;
+    for (i = 0; i < data->processcount; i++)
+    {
+        free(data->pcbArray[i]->name);
+        free(data->pcbArray[i]);
+    }
+    free(data->algorithm);
+    free(data);
 }
 
 int strToInt(char* str)
@@ -222,3 +222,5 @@ int strToInt(char* str)
 
 	return num;
 }
+
+
