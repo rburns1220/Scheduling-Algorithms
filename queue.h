@@ -1,9 +1,3 @@
-// Armand Alvarez
-// Ryan Burns
-// Sean Simonian
-// COP 4600 Spring 2018 Programming Assignment 1
-
-
 #include <stdio.h>
 #include <stdlib.h>
 // --- Object Definitions -- //
@@ -11,15 +5,15 @@
 
 // --- README --- //
 /*
-	- Node* createEmptyNode()	:	Creates an node with null attributes
-	- Node* createNode(PCB*)	:	Creates a node with the PCB* as the process attribute
-	- Queue* createQueue()		:	Create an empty queue
-	- Node* pop(Queue* q)		:	Pass the queue you wish to pop from and it will return the node and set the new head.
-	- void push(Queue*, Node*) :	Push Node* to the end of the queue.
-	- void pushByArrival(Queue* q, Node* node)			: Push Node* based on it's process's arrivalTime. Lower arrivalTime, closer to head.
-	- void pushByBurstRemaining(Queue* q, Node* node)	: Push Node* based on process's burstRemaining. Lower burstRemaining, closer to head.
-	****IMPORTANT****
-	To actually use a queue, you'll need to initialize a node per process before you can push/pop.
+    - Node* createEmptyNode()  :    Creates an node with null attributes
+    - Node* createNode(PCB*)   :    Creates a node with the PCB* as the process attribute
+    - Queue* createQueue()     :    Create an empty queue
+    - Node* pop(Queue* q)      :    Pass the queue you wish to pop from and it will return the node and set the new head.
+    - void push(Queue*, Node*) :    Push Node* to the end of the queue.
+    - void pushByArrival(Queue* q, Node* node)          : Push Node* based on it's process's arrivalTime. Lower arrivalTime, closer to head.
+    - void pushByBurstRemaining(Queue* q, Node* node)   : Push Node* based on process's burstRemaining. Lower burstRemaining, closer to head.
+    ****IMPORTANT****
+    To actually use a queue, you'll need to initialize a node per process before you can push/pop.
 */
 
 typedef struct Node Node;
@@ -103,7 +97,7 @@ Node* pop(Queue* q)
 	nodeToPop->ahead = NULL;
 
 	if (q->head != NULL)
-		q->head->behind = NULL;
+        q->head->behind = NULL;
 
 	return nodeToPop;
 }
@@ -126,7 +120,7 @@ void push(Queue* q, Node* node)
 	// Only one node in Queue (head)
 	else if (q->tail == NULL)
 	{
-		q->head->ahead = node;
+	    q->head->ahead = node;
 		q->tail = node;
 		node->ahead = NULL;
 		node->behind = q->head;
@@ -135,10 +129,10 @@ void push(Queue* q, Node* node)
 	// Queue has two or more nodes.
 	else
 	{
-		q->tail->ahead = node;
-		node->behind = q->tail;
-		q->tail = node;
-		node->ahead = NULL;
+	    q->tail->ahead = node;
+        node->behind = q->tail;
+        q->tail = node;
+        node->ahead = NULL;
 	}
 }
 
@@ -155,7 +149,7 @@ void pushByArrival(Queue* q, Node* node)
 	{
 		if (node->process->arrivalTime < currentNode->process->arrivalTime)
 				break;
-		currentNode = currentNode->ahead;
+        currentNode = currentNode->ahead;
 	}
 
 	// Head Insert
@@ -184,8 +178,8 @@ void pushByArrival(Queue* q, Node* node)
 	}
 	else
 	{
-		if (currentNode == q->head)
-			q->head = node;
+	    if (currentNode == q->head)
+            q->head = node;
 		node->behind = currentNode->behind;
 		node->ahead = currentNode;
 		currentNode->behind = node;
@@ -206,7 +200,7 @@ void pushByBurstRemaining(Queue* q, Node* node)
 	{
 		if (node->process->burstRemaining < currentNode->process->burstRemaining)
 				break;
-		currentNode = currentNode->ahead;
+        currentNode = currentNode->ahead;
 	}
 
 	// Head Insert
@@ -235,8 +229,8 @@ void pushByBurstRemaining(Queue* q, Node* node)
 	}
 	else
 	{
-		if (currentNode == q->head)
-			q->head = node;
+	    if (currentNode == q->head)
+            q->head = node;
 		node->behind = currentNode->behind;
 		node->ahead = currentNode;
 		currentNode->behind = node;
