@@ -19,7 +19,7 @@ int main()
 	FILE* out;
 	Data* data;
 
-	out = fopen("process.out", "w");
+	out = fopen("processes.out", "w");
 	data = parseFile("processes.in");
 
 	if (strcmp(data->algorithm, "sjf") == 0)
