@@ -3,7 +3,6 @@
 // Sean Simonian
 // COP 4600 Spring 2018 Programming Assignment 1
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -194,6 +193,8 @@ Data* parseFile (char* filename)
 		free(word);
     }
 
+    if (word != NULL)
+        free(word);
     free(line);
     fclose(fp);
 	return data;
@@ -207,6 +208,7 @@ void destroyData(Data* data)
         free(data->pcbArray[i]->name);
         free(data->pcbArray[i]);
     }
+    free(data->pcbArray);
     free(data->algorithm);
     free(data);
 }
