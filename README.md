@@ -7,8 +7,8 @@ Assignment:
 
 Input:
 
-	Program will read a file from the current directory called processes.in,
-	which will be formatted as follows.
+	Program will read a file from the current directory called "processes.in",
+	which will be formatted as shown below.
 	The program should ignore everything on a line after a # mark and ignore additional spaces in input.
 
 Sample Input:
@@ -24,7 +24,7 @@ Note that the processes do not need to be specified in order of arrival, and do 
 
 Output:
 
-	Generate a file called processes.out, formatted as follows.
+	Generate a file called "processes.out", formatted as shown below.
 
 Sample Output:
 
