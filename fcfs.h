@@ -20,7 +20,7 @@ void firstComeFirstServed(Data* data, FILE* out)
 
 	fprintf(out, "%d processes\nUsing First-Come First-Served\n\n", data->processcount);
 
-	int timer = 0;
+	int i, timer = 0;
 	Node* tempProcess = NULL;	// temp node used for popping/pushing processes
 	Node* activeProcess = NULL;	// node used to control the process currently executing
 
@@ -30,7 +30,7 @@ void firstComeFirstServed(Data* data, FILE* out)
 
 	// Initialize main process queue to hold a node for each process in the order that they'll arrive
 	Queue* processQueue = createQueue();
-	for (int i = 0; i < data->processcount; i++)
+	for (i = 0; i < data->processcount; i++)
 	{
 		pushByArrival(processQueue, createNode(data->pcbArray[i]));
 	}
@@ -87,7 +87,7 @@ void firstComeFirstServed(Data* data, FILE* out)
 
 
 	fprintf(out, "Finished at time %d\n\n", timer);
-	for (int i = 0; i < data->processcount; i++)
+	for (i = 0; i < data->processcount; i++)
 	{
 		// Calculate turn around time as time spent waiting + time spent executing
 		int turnAroundTime = data->pcbArray[i]->waitTime + data->pcbArray[i]->burst;
@@ -103,4 +103,5 @@ void firstComeFirstServed(Data* data, FILE* out)
 	arrivedQueue = NULL;
 	tempProcess = NULL;
 	activeProcess = NULL;
+	fclose(out);
 }
