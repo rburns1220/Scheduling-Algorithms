@@ -1,3 +1,8 @@
+// Armand Alvarez
+// Ryan Burns
+// Sean Simonian
+// COP 4600 Spring 2018 Programming Assignment 1
+
 #include <stdio.h>
 #include <stdlib.h>
 // --- Object Definitions -- //
@@ -97,7 +102,7 @@ Node* pop(Queue* q)
 	nodeToPop->ahead = NULL;
 
 	if (q->head != NULL)
-        q->head->behind = NULL;
+        	q->head->behind = NULL;
 
 	return nodeToPop;
 }
@@ -120,7 +125,7 @@ void push(Queue* q, Node* node)
 	// Only one node in Queue (head)
 	else if (q->tail == NULL)
 	{
-	    q->head->ahead = node;
+	    	q->head->ahead = node;
 		q->tail = node;
 		node->ahead = NULL;
 		node->behind = q->head;
@@ -129,10 +134,10 @@ void push(Queue* q, Node* node)
 	// Queue has two or more nodes.
 	else
 	{
-	    q->tail->ahead = node;
-        node->behind = q->tail;
-        q->tail = node;
-        node->ahead = NULL;
+	    	q->tail->ahead = node;
+        	node->behind = q->tail;
+        	q->tail = node;
+        	node->ahead = NULL;
 	}
 }
 
@@ -179,7 +184,7 @@ void pushByArrival(Queue* q, Node* node)
 	else
 	{
 	    if (currentNode == q->head)
-            q->head = node;
+            	q->head = node;
 		node->behind = currentNode->behind;
 		node->ahead = currentNode;
 		currentNode->behind = node;
@@ -230,7 +235,7 @@ void pushByBurstRemaining(Queue* q, Node* node)
 	else
 	{
 	    if (currentNode == q->head)
-            q->head = node;
+            	q->head = node;
 		node->behind = currentNode->behind;
 		node->ahead = currentNode;
 		currentNode->behind = node;
