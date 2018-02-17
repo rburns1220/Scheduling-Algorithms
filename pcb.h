@@ -34,7 +34,6 @@ PCB* createEmptyPCB()
 {
 	PCB* pcb = malloc(sizeof(PCB));
 	pcb->waitTime = 0;
-	pcb->lastUse = NULL;
 	return pcb;
 }
 
