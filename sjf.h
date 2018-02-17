@@ -80,18 +80,18 @@ void shortestJobFirst(Data* data, FILE* out)
 		else
 			activeNode->process->burstRemaining--;
 
-		timer++;
+        timer++;
 
 	}
-	
+
 	// Check if a process finished on the last tick
 	if (activeNode != NULL && activeNode->process->burstRemaining == 0)
-	{
-			fprintf(out, "Time %d: %s finished\n", timer, activeNode->process->name);
-			free(activeNode);
-			activeNode = NULL;
-	}
-	
+    {
+        fprintf(out, "Time %d: %s finished\n", timer, activeNode->process->name);
+        free(activeNode);
+        activeNode = NULL;
+    }
+
 	free(scheduleq);
 	free(arrivalq);
 
@@ -100,7 +100,7 @@ void shortestJobFirst(Data* data, FILE* out)
 	for (i = 0; i < processCount; i++)
 	{
 		fprintf(out, "%s wait %d turnaround %d\n", data->pcbArray[i]->name, data->pcbArray[i]->waitTime,
-			data->pcbArray[i]->waitTime + data->pcbArray[i]->burst);
+           data->pcbArray[i]->waitTime + data->pcbArray[i]->burst);
 	}
 
 }
