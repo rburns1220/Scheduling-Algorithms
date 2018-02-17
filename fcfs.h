@@ -18,7 +18,7 @@ void firstComeFirstServed(Data* data, FILE* out)
 		return;
 	}
 
-	fprintf(out, "%d processes\nUsing First-Come First-Served\n\n", data->processcount);
+	fprintf(out, "%d processes\nUsing First Come First Served\n\n", data->processcount);
 
 	int i, timer = 0;
 	Node* tempProcess = NULL;	// temp node used for popping/pushing processes
@@ -97,10 +97,7 @@ void firstComeFirstServed(Data* data, FILE* out)
 
 	free(processQueue);
 	free(arrivedQueue);
-	free(tempProcess);
-	free(activeProcess);
-	processQueue = NULL;
-	arrivedQueue = NULL;
-	tempProcess = NULL;
-	activeProcess = NULL;
+	if (activeProcess != NULL)
+        free(activeProcess);
+
 }
