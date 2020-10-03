@@ -1,103 +1,84 @@
-// Armand Alvarez
-// Ryan Burns
-// Sean Simonian
-// COP 4600 Spring 2018 Programming Assignment 1
-// First-Come First-Served
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-
-
-void firstComeFirstServed(Data* data, FILE* out)
+#include<stdio.h>
+main()
 {
-	// Can't run if files don't exist
-	if (data == NULL || out == NULL)
-	{
-		return;
-	}
-
-	fprintf(out, "%d processes\nUsing First Come First Served\n\n", data->processcount);
-
-	int i, timer = 0;
-	Node* tempProcess = NULL;	// temp node used for popping/pushing processes
-	Node* activeProcess = NULL;	// node used to control the process currently executing
-
-	// arrivedQueue will hold a node for each process that has arrived and has not yet completed
-	Queue* arrivedQueue = createQueue();
-
-
-	// Initialize main process queue to hold a node for each process in the order that they'll arrive
-	Queue* processQueue = createQueue();
-	for (i = 0; i < data->processcount; i++)
-	{
-		pushByArrival(processQueue, createNode(data->pcbArray[i]));
-	}
-
-
-	// 1 iteration per time unit, for the amount of time it's told to run
-	for (timer = 0; timer < data->runfor; timer++)
-	{
-		// At the start of each each timestep, cycle through all processes that arrive at the current time.
-		// Pop these process from the main queue and push them to the end of the arrivedQueue
-		while (processQueue->head != NULL && processQueue->head->process->arrivalTime == timer)
-		{
-			tempProcess = pop(processQueue);
-			push(arrivedQueue, tempProcess);
-			fprintf(out, "Time %d: %s arrived\n", timer, tempProcess->process->name);
-			tempProcess = NULL;
-		}
-
-		// Check if the active process is complete
-		if (activeProcess != NULL && activeProcess->process->burstRemaining == 0)
-		{
-			fprintf(out, "Time %d: %s finished\n", timer, activeProcess->process->name);
-			free(activeProcess);
-			activeProcess = NULL;
-		}
-
-		// Start a new process
-		if (activeProcess == NULL && arrivedQueue->head != NULL)
-		{
-			activeProcess = pop(arrivedQueue);
-			activeProcess->process->waitTime += timer - activeProcess->process->arrivalTime;
-			fprintf(out, "Time %d: %s selected (burst %d)\n", timer, activeProcess->process->name, activeProcess->process->burstRemaining);
-		}
-
-		// If a process is executed during this timestep, decrement it's remaining burst time
-		if (activeProcess != NULL)
-		{
-			activeProcess->process->burstRemaining--;
-		}
-		else
-		{
-			fprintf(out, "Time %d: IDLE\n", timer);
-		}
-	}
-
-
-	// Check if a process finished on the last tick
-	if (activeProcess != NULL && activeProcess->process->burstRemaining == 0)
-	{
-		fprintf(out, "Time %d: %s finished\n", timer, activeProcess->process->name);
-		free(activeProcess);
-		activeProcess = NULL;
-	}
-
-
-	fprintf(out, "Finished at time %d\n\n", timer);
-	for (i = 0; i < data->processcount; i++)
-	{
-		// Calculate turn around time as time spent waiting + time spent executing
-		int turnAroundTime = data->pcbArray[i]->waitTime + data->pcbArray[i]->burst;
-
-		fprintf(out, "%s wait %d turnaround %d\n", data->pcbArray[i]->name, data->pcbArray[i]->waitTime, turnAroundTime);
-	}
-
-	free(processQueue);
-	free(arrivedQueue);
-	if (activeProcess != NULL)
-        	free(activeProcess);
-
+int n,a[10],b[10],p[10],t[10],c[10],w[10],i,j,temp,temp1,temp2,k;
+float atat,awt,sum1=0.0,sum=0.0;
+int length = sizeof(a)/sizeof(a[0]);
+for(i=0;i<10;i++)
+ {
+a[i]=0; b[i]=0; p[i]=0; t[i]=0,c[i]=0,w[i]=0;
+ }
+printf("Enter the number of process=");
+scanf("%d",&n);
+printf("Enter the process");
+for(i=0;i<n;i++)
+scanf("%d",&p[i]);
+printf("Enter the burst times=");
+for(i=0;i<n;i++)
+scanf("%d",&b[i]);
+printf("\nEnter the arrival times=");
+for(i=0;i<n;i++)
+scanf("%d",&a[i]);
+for (int i = 0; i < n; i++) {
+ for (int j = i+1; j < n; j++) {
+ if(a[i] > a[j]) {
+ temp = a[i];
+ a[i] = a[j];
+ a[j] = temp;
+ temp1=b[i];
+ b[i]=b[j];
+ b[j]=temp1;
+ temp2=p[i];
+ p[i]=p[j];
+ p[j]=temp2;
+ }
+ }
+ }
+ for(i=0;i<10;i++){
+ c[i+1]=c[i]+b[i];
+ }
+ printf("\n");
+ printf("\n");
+ printf("--------------------------------------------------------------------");
+ printf("\n");
+ for(i=0;i<n;i++){
+ printf("p%d\t|\t",p[i]);
+ }
+ printf("\n");
+ printf("--------------------------------------------------------------------");
+ printf("\n");
+ for(i=1;i<n+1;i++){
+ printf("%d\t|\t",c[i]);
+ }
+ printf("\n");
+ for(i=0;i<10;i++){
+ t[i]=c[i+1]-a[i];
+ }
+ for(i=0;i<10;i++){
+ w[i]=t[i]-b[i];
+ }
+ printf("turn around time\n\n");
+ printf("process\t\tTAT\n\n");
+ for(i=0;i<n;i++){
+ printf("p%d\t\t",p[i]);
+ printf("%d\t\t",t[i]);
+ printf("\n");
+ }
+ printf("AVERAGE TURN AROUND TIME\n\n");
+ for(i=0;i<n;i++)
+ sum=sum+t[i];
+ atat=sum/n;
+ printf("%.2f\t\n\n",atat);
+ printf("waiting time\n\n");
+ printf("process\t\tWT\n");
+ for(i=0;i<n;i++){
+ printf("p%d\t\t",p[i]);
+ printf("%d\t\t",w[i]);
+ printf("\n");
+ }
+ printf("AVERAGE WAITING TIME\n\n");
+ for(i=0;i<n;i++)
+ sum1=sum1+w[i];
+ awt=sum1/n;
+ printf("%f\n\n",awt);
 }
