@@ -1,103 +1,243 @@
-// Armand Alvarez
-// Ryan Burns
-// Sean Simonian
-// COP 4600 Spring 2018 Programming Assignment 1
-// First-Come First-Served
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-
-
-void firstComeFirstServed(Data* data, FILE* out)
+#define size 100
+struct process{
+int pid;
+int waitingtime;
+int bursttime;
+int arrivaltime;
+int turnaroundtime;
+int completiontime;
+};
+int main()
 {
-	// Can't run if files don't exist
-	if (data == NULL || out == NULL)
-	{
-		return;
-	}
+struct process p[size];
+int n,i,j,temp,temp1,temp2;
+int sumwaiting=0;
+int sumturnaround=0;
 
-	fprintf(out, "%d processes\nUsing First Come First Served\n\n", data->processcount);
+printf("Enter the total no of processes:");
+scanf("%d",&n);
+printf("Enter the burst time and arrivaltime for each process:\n");
+for(i=0;i<n;i++)
+{
+p[i].pid=i+1;
+printf("p[%d] : ",i+1);
+scanf("%d",&p[i].bursttime);
+scanf("%d",&p[i].arrivaltime);
+p[i].waitingtime=0;
+p[i].turnaroundtime=0;
+p[i].completiontime=0;
+}
+for(i=0;i<n-1;i++)
 
-	int i, timer = 0;
-	Node* tempProcess = NULL;	// temp node used for popping/pushing processes
-	Node* activeProcess = NULL;	// node used to control the process currently executing
-
-	// arrivedQueue will hold a node for each process that has arrived and has not yet completed
-	Queue* arrivedQueue = createQueue();
-
-
-	// Initialize main process queue to hold a node for each process in the order that they'll arrive
-	Queue* processQueue = createQueue();
-	for (i = 0; i < data->processcount; i++)
-	{
-		pushByArrival(processQueue, createNode(data->pcbArray[i]));
-	}
-
-
-	// 1 iteration per time unit, for the amount of time it's told to run
-	for (timer = 0; timer < data->runfor; timer++)
-	{
-		// At the start of each each timestep, cycle through all processes that arrive at the current time.
-		// Pop these process from the main queue and push them to the end of the arrivedQueue
-		while (processQueue->head != NULL && processQueue->head->process->arrivalTime == timer)
-		{
-			tempProcess = pop(processQueue);
-			push(arrivedQueue, tempProcess);
-			fprintf(out, "Time %d: %s arrived\n", timer, tempProcess->process->name);
-			tempProcess = NULL;
-		}
-
-		// Check if the active process is complete
-		if (activeProcess != NULL && activeProcess->process->burstRemaining == 0)
-		{
-			fprintf(out, "Time %d: %s finished\n", timer, activeProcess->process->name);
-			free(activeProcess);
-			activeProcess = NULL;
-		}
-
-		// Start a new process
-		if (activeProcess == NULL && arrivedQueue->head != NULL)
-		{
-			activeProcess = pop(arrivedQueue);
-			activeProcess->process->waitTime += timer - activeProcess->process->arrivalTime;
-			fprintf(out, "Time %d: %s selected (burst %d)\n", timer, activeProcess->process->name, activeProcess->process->burstRemaining);
-		}
-
-		// If a process is executed during this timestep, decrement it's remaining burst time
-		if (activeProcess != NULL)
-		{
-			activeProcess->process->burstRemaining--;
-		}
-		else
-		{
-			fprintf(out, "Time %d: IDLE\n", timer);
-		}
-	}
-
-
-	// Check if a process finished on the last tick
-	if (activeProcess != NULL && activeProcess->process->burstRemaining == 0)
-	{
-		fprintf(out, "Time %d: %s finished\n", timer, activeProcess->process->name);
-		free(activeProcess);
-		activeProcess = NULL;
-	}
-
-
-	fprintf(out, "Finished at time %d\n\n", timer);
-	for (i = 0; i < data->processcount; i++)
-	{
-		// Calculate turn around time as time spent waiting + time spent executing
-		int turnAroundTime = data->pcbArray[i]->waitTime + data->pcbArray[i]->burst;
-
-		fprintf(out, "%s wait %d turnaround %d\n", data->pcbArray[i]->name, data->pcbArray[i]->waitTime, turnAroundTime);
-	}
-
-	free(processQueue);
-	free(arrivedQueue);
-	if (activeProcess != NULL)
-        	free(activeProcess);
+{
+for(j=0;j<n-1-i;j++)
+{
+if(p[j].arrivaltime>p[j+1].arrivaltime)
+{
+temp1=p[j].bursttime;
+p[j].bursttime=p[j+1].bursttime;
+p[j+1].bursttime=temp1;
+temp=p[j].arrivaltime;
+p[j].arrivaltime=p[j+1].arrivaltime;
+p[j+1].arrivaltime=temp;
+temp2=p[j].pid;
+p[j].pid=p[j+1].pid;
+p[j+1].pid=temp2;
 
 }
+}
+}
+p[0].turnaroundtime=p[0].bursttime;
+p[0].completiontime=p[0].bursttime+p[0].arrivaltime;
+for(i=1;i<n;i++)
+{
+if(p[i-1].completiontime<p[i].arrivaltime)
+{
+p[i-1].completiontime=p[i].arrivaltime;
+p[i].completiontime=p[i-1].completiontime+p[i].bursttime;
+}
+else
+{
+p[i].completiontime=p[i-1].completiontime+p[i].bursttime;
+
+}
+p[i].turnaroundtime = p[i].completiontime - p[i].arrivaltime;
+p[i].waitingtime = p[i].turnaroundtime - p[i].bursttime;
+}
+
+printf(" \nPROCESS\tB.T\tA.T\tT.T\tW.T\tC.T\n");
+for(i=0;i<n;i++)
+{
+printf("%d\t""%d\t""%d\t""%d\t""%d\t""%d\t",p[i].pid,p[i].bursttime,p[i].arrivaltime,p[i].turnaroundtime,p[i].waitingtime,p[i].completiontime);
+printf("\n");
+sumwaiting=sumwaiting+p[i].waitingtime;
+sumturnaround=sumturnaround+p[i].turnaroundtime;
+}
+
+printf("TOTAL WAITING TIME : %d\n",sumwaiting);
+printf("AVERAGE WAITING TIME : %d\n",sumwaiting/n);
+printf("TOTAL TURNAROUND TIME : %d\n",sumturnaround);
+printf("AVERAGE TURNAROUND TIME : %d\n",sumturnaround/n);
+puts("");
+puts(" GANTT CHART ");
+print_gantt_chart(p, n);
+return 0;
+}
+
+void print_gantt_chart(struct process p[],int n)
+{
+int i,j;
+printf(" ");
+for(i=0; i<n; i++) {
+
+for(j=0; j<p[i].bursttime; j++) printf("--");
+printf(" ");
+}
+printf("\n|");
+for(i=0; i<n; i++) {
+for(j=0; j<p[i].bursttime - 1; j++) printf(" ");
+printf("P%d", p[i].pid);
+for(j=0; j<p[i].bursttime - 1; j++) printf(" ");
+printf("|");
+}
+printf("\n ");
+
+for(i=0; i<n; i++) {
+for(j=0; j<p[i].bursttime; j++) printf("--");
+printf(" ");
+}
+printf("\n");
+
+printf("0");
+
+for(i=0; i<n; i++) {
+for(j=0; j<2*p[i].bursttime; j++) printf(" ");
+if(p[i].turnaroundtime > 9) printf("\b");
+printf("%d",p[i].completiontime);
+
+}
+printf("\n");
+}
+#include <stdio.h>
+#define size 100
+struct process{
+int pid;
+int waitingtime;
+int bursttime;
+int arrivaltime;
+int turnaroundtime;
+int completiontime;
+};
+int main()
+{
+struct process p[size];
+int n,i,j,temp,temp1,temp2;
+int sumwaiting=0;
+int sumturnaround=0;
+
+printf("Enter the total no of processes:");
+scanf("%d",&n);
+printf("Enter the burst time and arrivaltime for each process:\n");
+for(i=0;i<n;i++)
+{
+p[i].pid=i+1;
+printf("p %d : ",i+1);
+scanf("%d",&p[i].bursttime);
+scanf("%d",&p[i].arrivaltime);
+p[i].waitingtime=0;
+p[i].turnaroundtime=0;
+p[i].completiontime=0;
+}
+for(i=0;i<n-1;i++)
+
+{
+for(j=0;j<n-1-i;j++)
+{
+if(p[j].arrivaltime>p[j+1].arrivaltime)
+{
+temp1=p[j].bursttime;
+p[j].bursttime=p[j+1].bursttime;
+p[j+1].bursttime=temp1;
+temp=p[j].arrivaltime;
+p[j].arrivaltime=p[j+1].arrivaltime;
+p[j+1].arrivaltime=temp;
+temp2=p[j].pid;
+p[j].pid=p[j+1].pid;
+p[j+1].pid=temp2;
+
+}
+}
+}
+p[0].turnaroundtime=p[0].bursttime;
+p[0].completiontime=p[0].bursttime+p[0].arrivaltime;
+for(i=1;i<n;i++)
+{
+if(p[i-1].completiontime<p[i].arrivaltime)
+{
+p[i-1].completiontime=p[i].arrivaltime;
+p[i].completiontime=p[i-1].completiontime+p[i].bursttime;
+}
+else
+{
+p[i].completiontime=p[i-1].completiontime+p[i].bursttime;
+
+}
+p[i].turnaroundtime = p[i].completiontime - p[i].arrivaltime;
+p[i].waitingtime = p[i].turnaroundtime - p[i].bursttime;
+}
+
+printf(" \nPROC\tB.T\tA.T\tT.T\tW.T\tC.T\n");
+for(i=0;i<n;i++)
+{
+printf("%d\t""%d\t""%d\t""%d\t""%d\t""%d\t",p[i].pid,p[i].bursttime,p[i].arrivaltime,p[i].turnaroundtime,p[i].waitingtime,p[i].completiontime);
+printf("\n");
+sumwaiting=sumwaiting+p[i].waitingtime;
+sumturnaround=sumturnaround+p[i].turnaroundtime;
+}
+
+printf("TOTAL WAITING TIME : %d\n",sumwaiting);
+printf("AVERAGE WAITING TIME : %d\n",sumwaiting/n);
+printf("TOTAL TURNAROUND TIME : %d\n",sumturnaround);
+printf("AVERAGE TURNAROUND TIME : %d\n",sumturnaround/n);
+puts("");
+puts(" GANTT CHART ");
+print_gantt_chart(p, n);
+return 0;
+}
+
+void print_gantt_chart(struct process p[],int n)
+{
+int i,j;
+printf(" ");
+for(i=0; i<n; i++) {
+
+for(j=0; j<p[i].bursttime; j++);
+printf(" ");
+}
+printf("\n|");
+for(i=0; i<n; i++) {
+for(j=0; j<p[i].bursttime - 1; j++) printf(" ");
+printf("P%d", p[i].pid);
+for(j=0; j<p[i].bursttime - 1; j++) printf(" ");
+printf("|");
+}
+printf("\n ");
+
+for(i=0; i<n; i++) {
+for(j=0; j<p[i].bursttime; j++);
+printf(" ");
+}
+printf("\n");
+
+printf("0");
+
+for(i=0; i<n; i++) {
+for(j=0; j<2*p[i].bursttime; j++) printf(" ");
+if(p[i].turnaroundtime > 9) printf("\b");
+printf("%d",p[i].completiontime);
+
+}
+printf("\n");
+}
+
